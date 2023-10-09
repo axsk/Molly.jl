@@ -522,11 +522,7 @@ function simulate!(sys,
         a = accelerations(sys, neighbors; n_threads=n_threads)
         # noise = kB * T / M 
         noise = random_velocities(sys, sim.temperature; rng=rng)
-        if !all(isfinite, reinterpret(Float64, a))
-            @show step_n
-            @show reinterpret(Float64, a)
-
-        end
+        
         sys.coords += a ./ sim.friction .* sim.dt .+ sqrt(2 / sim.friction * sim.dt) .* noise
 
         @assert all(isfinite, reinterpret(Float64, sys.coords))
